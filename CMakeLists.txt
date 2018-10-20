@@ -13,6 +13,7 @@ include_directories("${CMAKE_CURRENT_BINARY_DIR}/lua")
 
 CHECK_LIBRARY_EXISTS(rt clock_gettime "" HAVE_LIB_RT)
 CHECK_LIBRARY_EXISTS(pthread pthread_create "" HAVE_LIB_PTHREAD)
+CHECK_LIBRARY_EXISTS(m sin "" HAVE_LIB_M)
 
 if (HAVE_LIB_RT)
     set(EXTRA_LIBS ${EXTRA_LIBS} rt)
@@ -21,6 +22,10 @@ endif (HAVE_LIB_RT)
 if (HAVE_LIB_PTHREAD)
     set(EXTRA_LIBS ${EXTRA_LIBS} pthread)
 endif (HAVE_LIB_PTHREAD)
+
+if (HAVE_LIB_M)
+    set(EXTRA_LIBS ${EXTRA_LIBS} m)
+endif (HAVE_LIB_M)
 
 message (STATUS "Checking for (p)Threads")
 find_package(Threads)
@@ -217,7 +222,12 @@ set(XB-LUA_SOURCE
 	lua/lua.c
 )
 add_executable(xb_lua ${XB-LUA_SOURCE})
-target_link_libraries (xb_lua ${EXTRA_LIBS})
+target_link_libraries (xb_lua
+	libxb_core_lua
+	libxb_aux_lua
+	libxb_lualib
+	${EXTRA_LIBS}
+)
 
 ### Lua examples (tbd) ########################
 #if (BUILD_XB-LUA_EXAMPLES)
