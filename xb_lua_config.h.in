@@ -1,0 +1,11 @@
+/* XB-LUA Device level config file */
+#ifndef xb_lua_config_h
+#define xb_lua_config_h
+
+#define PROJ_NAME "@CMAKE_PROJECT_NAME@"
+#define VERSION_MAJOR @XB-LUA_VERSION_MAJOR@
+#define VERSION_MINOR @XB-LUA_VERSION_MINOR@
+#define VERSION_PATCH @XB-LUA_VERSION_PATCH@
+#define VERSION "@XB-LUA_VERSION_MAJOR@.@XB-LUA_VERSION_MINOR@.@XB-LUA_VERSION_PATCH@"
+
+#endif
