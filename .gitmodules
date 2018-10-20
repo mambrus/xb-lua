@@ -4,3 +4,6 @@
 [submodule "cmake"]
 	path = cmake
 	url = ssh://helsinovarepo/xcmake.git
+[submodule "wikidata"]
+	path = wikidata
+	url = ssh://helsinovarepo-pro/xband/xb-lua.wiki.git
