@@ -8,4 +8,7 @@
 #define VERSION_PATCH @XB-LUA_VERSION_PATCH@
 #define VERSION "@XB-LUA_VERSION_MAJOR@.@XB-LUA_VERSION_MINOR@.@XB-LUA_VERSION_PATCH@"
 
+/* Directory where AF_LOCAL/AF_UNIX sockets will reside */
+#define XB-LUA_AF_UNIX_DIR    "@XB-LUA_AF_UNIX_DIR@"
+
 #endif

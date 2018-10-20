@@ -70,8 +70,10 @@ set(XB-LUA_AF_UNIX_DIR
 	CACHE STRING
 	"Domain-sockets directory")
 
-option(BUILD_XB-LUA_EXAMPLES
-	"Build test/example-program(s)" ON)
+
+### Lua examples (tbd) ########################
+#option(BUILD_XB-LUA_EXAMPLES
+#	"Build test/example-program(s)" ON)
 
 #-------------------------------------------------------------------------------
 # System (project supported) options
@@ -135,45 +137,113 @@ configure_file (
 # so that we will find Config.h
 include_directories("${PROJECT_BINARY_DIR}")
 
-# Interface (lib) - the main part of this project
-set(XB-LUA_INTERFACE_SOURCE
-	xb_lua_interface.c
-	common.c
-	client_rpc_bind.c
-	client_rpc_unbind.c
-	client_rpc_retrieve.c
-)
-add_library(libxb_lua SHARED ${XB-LUA_INTERFACE_SOURCE})
-target_link_libraries (libxb_lua ${EXTRA_LIBS})
 
-add_library(libxb_lua_static STATIC ${XB-LUA_INTERFACE_SOURCE})
-target_link_libraries (libxb_lua_static ${EXTRA_LIBS})
+### core library #############################
+set(XB-LUA_CORE_O
+	lua/lapi.c
+	lua/lcode.c
+	lua/lctype.c
+	lua/ldebug.c
+	lua/ldo.c
+	lua/ldump.c
+	lua/lfunc.c
+	lua/lgc.c
+	lua/llex.c
+	lua/lmem.c
+	lua/lobject.c
+	lua/lopcodes.c
+	lua/lparser.c
+	lua/lstate.c
+	lua/lstring.c
+	lua/ltable.c
+	lua/ltm.c
+	lua/lundump.c
+	lua/lvm.c
+	lua/lzio.c
+	lua/ltests.c
+)
+add_library(libxb_core_lua SHARED ${XB-LUA_CORE_O})
+target_link_libraries (libxb_core_lua ${EXTRA_LIBS})
+
+add_library(libxb_core_lua_static STATIC ${XB-LUA_CORE_O})
+target_link_libraries (libxb_core_lua_static ${EXTRA_LIBS})
 
 set_target_properties(
-  libxb_lua PROPERTIES PUBLIC_HEADER
-  "include/xb_lua/service.h")
+  libxb_core_lua PROPERTIES PUBLIC_HEADER
+  "lua/lua.h")
 
+### aux library #############################
+set(XB-LUA_AUX_O
+	lua/lauxlib.c
+)
+add_library(libxb_aux_lua SHARED ${XB-LUA_AUX_O})
+target_link_libraries (libxb_aux_lua ${EXTRA_LIBS})
+
+add_library(libxb_aux_lua_static STATIC ${XB-LUA_AUX_O})
+target_link_libraries (libxb_aux_lua_static ${EXTRA_LIBS})
+
+set_target_properties(
+  libxb_aux_lua PROPERTIES PUBLIC_HEADER
+  "lua/lauxlib.h")
+
+### "lualib" library #############################
+set(XB-LUA_LIB_O
+	lua/lbaselib.c
+	lua/ldblib.c
+	lua/liolib.c
+	lua/lmathlib.c
+	lua/loslib.c
+	lua/ltablib.c
+	lua/lstrlib.c
+	lua/lutf8lib.c
+	lua/lbitlib.c
+	lua/loadlib.c
+	lua/lcorolib.c
+	lua/linit.c
+)
+add_library(libxb_lualib SHARED ${XB-LUA_LIB_O})
+target_link_libraries (libxb_lualib ${EXTRA_LIBS})
+
+add_library(libxb_lualib_static STATIC ${XB-LUA_LIB_O})
+target_link_libraries (libxb_lualib_static ${EXTRA_LIBS})
+
+set_target_properties(
+  libxb_lualib PROPERTIES PUBLIC_HEADER
+  "lua/lualib.h")
+
+
+### Lua executable #############################
 set(XB-LUA_SOURCE
-	xb_lua.c
-	data.c
-	common.c
-	server_rpc_bind.c
-	server_rpc_unbind.c
-	server_rpc_retrieve.c
+	lua/lua.c
 )
 add_executable(xb_lua ${XB-LUA_SOURCE})
 target_link_libraries (xb_lua ${EXTRA_LIBS})
 
-if (BUILD_XB-LUA_EXAMPLES)
-	add_subdirectory (examples)
-endif (BUILD_XB-LUA_EXAMPLES)
+### Lua examples (tbd) ########################
+#if (BUILD_XB-LUA_EXAMPLES)
+#	add_subdirectory (examples)
+#endif (BUILD_XB-LUA_EXAMPLES)
+
+#------------------------------------------------------
 
 # Installation
 # Shells (ignore for now)
 #install(PROGRAMS ${PROJECT_BINARY_DIR}/somescript.sh DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
+
+# Build-targets
+set(XB_LUA_TARGETS
+	libxb_core_lua
+	libxb_core_lua_static
+	libxb_aux_lua
+	libxb_aux_lua_static
+	libxb_lualib
+	libxb_lualib_static
+	xb_lua
+)
+
 # Targets:
-install(TARGETS xb_lua libxb_lua libxb_lua_static
+install(TARGETS       ${XB_LUA_TARGETS}
         RUNTIME       DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
         LIBRARY       DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
         ARCHIVE       DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
@@ -186,7 +256,7 @@ SET(CPACK_PACKAGE_VERSION_MAJOR ${XB-LUA_VERSION_MAJOR})
 SET(CPACK_PACKAGE_VERSION_MINOR ${XB-LUA_VERSION_MINOR})
 SET(CPACK_PACKAGE_VERSION_PATCH ${XB-LUA_VERSION_PATCH})
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY
-	"XB-LUA: lua & luac for x-band"
+	"XB-LUA: lua & luac for x-band")
 
 set(SPECIFIED_CPACK
 	${SPECIFIED_CPACK}
