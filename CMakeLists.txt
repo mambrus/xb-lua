@@ -8,6 +8,8 @@ include(CheckIncludeFiles)
 include(CheckFunctionExists)
 include(CheckSymbolExists)
 
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
+include_directories("${CMAKE_CURRENT_BINARY_DIR}/include")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/lua")
 include_directories("${CMAKE_CURRENT_BINARY_DIR}/lua")
 
@@ -257,6 +259,25 @@ target_link_libraries (xb_lua
 	${GOODI_LIBS}
 )
 
+### lua-console lib #############################
+set(XB-LUA_CONSOLE
+	lua_console_533.c
+)
+add_library(libxb_lua_console SHARED ${XB-LUA_CONSOLE})
+target_link_libraries (libxb_lua_console ${EXTRA_LIBS})
+
+add_library(libxb_lua_console_static STATIC ${XB-LUA_CONSOLE})
+target_link_libraries (libxb_lua_console_static
+	libxb_core_lua
+	libxb_aux_lua
+	libxb_lualib
+	${EXTRA_LIBS}
+)
+
+set_target_properties(
+  libxb_lua_console PROPERTIES PUBLIC_HEADER
+  "include/lua/console.h")
+
 ### Lua examples (tbd) ########################
 #if (BUILD_XB-LUA_EXAMPLES)
 #	add_subdirectory (examples)
@@ -277,6 +298,8 @@ set(XB_LUA_TARGETS
 	libxb_aux_lua_static
 	libxb_lualib
 	libxb_lualib_static
+	libxb_lua_console
+	libxb_lua_console_static
 	xb_lua
 )
 
