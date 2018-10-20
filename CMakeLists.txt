@@ -110,11 +110,22 @@ set(XB-LUA_AF_UNIX_DIR
 #-------------------------------------------------------------------------------
 # Build-tool options
 #-------------------------------------------------------------------------------
-
 set(CMAKE_EXTRA_C_FLAGS
-	"${CMAKE_EXTRA_C_FLAGS}-DLUA_USE_LINUX"
+	"${CMAKE_EXTRA_C_FLAGS}"
 	CACHE STRING
 	"Compiler options appended to CMAKE_C_FLAGS")
+
+if (NOT GOODI_LIBS STREQUAL "")
+	# Offer option if there is a chance it would build
+	option(ENABLE_LINUX_GOODIES
+		"Build with linux goodies" ON)
+else ()
+	SET(ENABLE_LINUX_GOODIES OFF)
+endif ()
+
+if (ENABLE_LINUX_GOODIES)
+	SET(CMAKE_EXTRA_C_FLAGS "${CMAKE_EXTRA_C_FLAGS} -DLUA_USE_LINUX")
+endif ()
 
 #-------------------------------------------------------------------------------
 # X build-tool options (this project's x-tool handling)
