@@ -7,3 +7,9 @@
 [submodule "wikidata"]
 	path = wikidata
 	url = ssh://helsinovarepo-pro/xband/xb-lua.wiki.git
+[submodule "lua"]
+	path = lua
+	url = https://github.com/lua/lua.git
+[submodule "luac"]
+	path = luac
+	url = https://github.com/lua/luac.git
