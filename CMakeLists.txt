@@ -196,28 +196,28 @@ set(XB-LUA_CORE_O
 	lua/lzio.c
 	lua/ltests.c
 )
-add_library(libxb_core_lua SHARED ${XB-LUA_CORE_O})
-target_link_libraries (libxb_core_lua ${EXTRA_LIBS})
+add_library(libxb_luacore SHARED ${XB-LUA_CORE_O})
+target_link_libraries (libxb_luacore ${EXTRA_LIBS})
 
-add_library(libxb_core_lua_static STATIC ${XB-LUA_CORE_O})
-target_link_libraries (libxb_core_lua_static ${EXTRA_LIBS})
+add_library(libxb_luacore_static STATIC ${XB-LUA_CORE_O})
+target_link_libraries (libxb_luacore_static ${EXTRA_LIBS})
 
 set_target_properties(
-  libxb_core_lua PROPERTIES PUBLIC_HEADER
+  libxb_luacore PROPERTIES PUBLIC_HEADER
   "lua/lua.h")
 
 ### aux library #############################
 set(XB-LUA_AUX_O
 	lua/lauxlib.c
 )
-add_library(libxb_aux_lua SHARED ${XB-LUA_AUX_O})
-target_link_libraries (libxb_aux_lua ${EXTRA_LIBS})
+add_library(libxb_luaaux SHARED ${XB-LUA_AUX_O})
+target_link_libraries (libxb_luaaux ${EXTRA_LIBS})
 
-add_library(libxb_aux_lua_static STATIC ${XB-LUA_AUX_O})
-target_link_libraries (libxb_aux_lua_static ${EXTRA_LIBS})
+add_library(libxb_luaaux_static STATIC ${XB-LUA_AUX_O})
+target_link_libraries (libxb_luaaux_static ${EXTRA_LIBS})
 
 set_target_properties(
-  libxb_aux_lua PROPERTIES PUBLIC_HEADER
+  libxb_luaaux PROPERTIES PUBLIC_HEADER
   "lua/lauxlib.h")
 
 ### "lualib" library #############################
@@ -252,8 +252,8 @@ set(XB-LUA_SOURCE
 )
 add_executable(xb_lua ${XB-LUA_SOURCE})
 target_link_libraries (xb_lua
-	libxb_core_lua
-	libxb_aux_lua
+	libxb_luacore
+	libxb_luaaux
 	libxb_lualib
 	${EXTRA_LIBS}
 	${GOODI_LIBS}
@@ -263,19 +263,19 @@ target_link_libraries (xb_lua
 set(XB-LUA_CONSOLE
 	lua_console_533.c
 )
-add_library(libxb_lua_console SHARED ${XB-LUA_CONSOLE})
-target_link_libraries (libxb_lua_console ${EXTRA_LIBS})
+add_library(libxb_luaconsole SHARED ${XB-LUA_CONSOLE})
+target_link_libraries (libxb_luaconsole ${EXTRA_LIBS})
 
-add_library(libxb_lua_console_static STATIC ${XB-LUA_CONSOLE})
-target_link_libraries (libxb_lua_console_static
-	libxb_core_lua
-	libxb_aux_lua
+add_library(libxb_luaconsole_static STATIC ${XB-LUA_CONSOLE})
+target_link_libraries (libxb_luaconsole_static
+	libxb_luacore
+	libxb_luaaux
 	libxb_lualib
 	${EXTRA_LIBS}
 )
 
 set_target_properties(
-  libxb_lua_console PROPERTIES PUBLIC_HEADER
+  libxb_luaconsole PROPERTIES PUBLIC_HEADER
   "include/lua/console.h")
 
 ### Lua examples (tbd) ########################
@@ -292,14 +292,14 @@ set_target_properties(
 
 # Build-targets
 set(XB_LUA_TARGETS
-	libxb_core_lua
-	libxb_core_lua_static
-	libxb_aux_lua
-	libxb_aux_lua_static
+	libxb_luacore
+	libxb_luacore_static
+	libxb_luaaux
+	libxb_luaaux_static
 	libxb_lualib
 	libxb_lualib_static
-	libxb_lua_console
-	libxb_lua_console_static
+	libxb_luaconsole
+	libxb_luaconsole_static
 	xb_lua
 )
 
