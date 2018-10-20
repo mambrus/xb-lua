@@ -14,18 +14,34 @@ include_directories("${CMAKE_CURRENT_BINARY_DIR}/lua")
 CHECK_LIBRARY_EXISTS(rt clock_gettime "" HAVE_LIB_RT)
 CHECK_LIBRARY_EXISTS(pthread pthread_create "" HAVE_LIB_PTHREAD)
 CHECK_LIBRARY_EXISTS(m sin "" HAVE_LIB_M)
-
+#
 if (HAVE_LIB_RT)
     set(EXTRA_LIBS ${EXTRA_LIBS} rt)
 endif (HAVE_LIB_RT)
-
 if (HAVE_LIB_PTHREAD)
     set(EXTRA_LIBS ${EXTRA_LIBS} pthread)
 endif (HAVE_LIB_PTHREAD)
-
 if (HAVE_LIB_M)
     set(EXTRA_LIBS ${EXTRA_LIBS} m)
 endif (HAVE_LIB_M)
+
+CHECK_LIBRARY_EXISTS(dl dlopen "" HAVE_LIB_DL)
+CHECK_LIBRARY_EXISTS(readline rl_instream "" HAVE_LIB_RL)
+CHECK_LIBRARY_EXISTS(history history_search "" HAVE_LIB_HISTORY)
+CHECK_LIBRARY_EXISTS(ncurses getcurx "" HAVE_LIB_NCURSES)
+#
+if (HAVE_LIB_DL)
+    set(GOODI_LIBS ${GOODI_LIBS} dl)
+endif (HAVE_LIB_DL)
+if (HAVE_LIB_RL)
+    set(GOODI_LIBS ${GOODI_LIBS} readline)
+endif (HAVE_LIB_RL)
+if (HAVE_LIB_HISTORY)
+    set(GOODI_LIBS ${GOODI_LIBS} history)
+endif (HAVE_LIB_HISTORY)
+if (HAVE_LIB_NCURSES)
+    set(GOODI_LIBS ${GOODI_LIBS} ncurses)
+endif (HAVE_LIB_NCURSES)
 
 message (STATUS "Checking for (p)Threads")
 find_package(Threads)
@@ -96,7 +112,7 @@ set(XB-LUA_AF_UNIX_DIR
 #-------------------------------------------------------------------------------
 
 set(CMAKE_EXTRA_C_FLAGS
-	"${CMAKE_EXTRA_C_FLAGS}"
+	"${CMAKE_EXTRA_C_FLAGS}-DLUA_USE_LINUX"
 	CACHE STRING
 	"Compiler options appended to CMAKE_C_FLAGS")
 
@@ -227,6 +243,7 @@ target_link_libraries (xb_lua
 	libxb_aux_lua
 	libxb_lualib
 	${EXTRA_LIBS}
+	${GOODI_LIBS}
 )
 
 ### Lua examples (tbd) ########################
