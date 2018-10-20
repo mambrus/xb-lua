@@ -52,3 +52,5 @@ c-tags
 # without making repo diry
 .env.local
 
+# Final executable
+xb_lua
