@@ -1,0 +1,54 @@
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries & other intermediate build-files
+*.lib
+*.a
+*.la
+*.lo
+*.d
+*_config.h
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# CMake artifacts
+CMakeCache.txt
+CMakeFiles/
+*.cmake
+Makefile
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+
+# Tags
+tags
+c-tags
+
+# Other produced or intermediate files
+
+# Back-up files (created by indent e.t.c.)
+*.*~
+
+# Skip some local dot-files that should be permitted to change
+# without making repo diry
+.env.local
+
