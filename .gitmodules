@@ -1,0 +1,6 @@
+[submodule "wiki"]
+	path = wiki
+	url = https://github.com/helsinova/wiki-wrapper.git
+[submodule "cmake"]
+	path = cmake
+	url = ssh://helsinovarepo/xcmake.git
