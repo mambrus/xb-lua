@@ -27,6 +27,9 @@ CMakeCache.txt
 CMakeFiles/
 *.cmake
 Makefile
+_CPack_Packages/
+install_manifest.txt
+*.deb
 
 # Executables
 *.exe
@@ -44,6 +47,8 @@ tags
 c-tags
 
 # Other produced or intermediate files
+*.orig
+*.patch
 
 # Back-up files (created by indent e.t.c.)
 *.*~
