@@ -127,7 +127,10 @@ endif ()
 
 if (ENABLE_LINUX_GOODIES)
 	SET(CMAKE_EXTRA_C_FLAGS "${CMAKE_EXTRA_C_FLAGS} -DLUA_USE_LINUX")
+else ()
+	UNSET(GOODI_LIBS)
 endif ()
+
 
 #-------------------------------------------------------------------------------
 # X build-tool options (this project's x-tool handling)
