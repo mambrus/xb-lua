@@ -262,9 +262,11 @@ target_link_libraries (xb_lua
 	${GOODI_LIBS}
 )
 
-### lua-console lib #############################
+### lua-console & terminal lib #################
 set(XB-LUA_CONSOLE
 	lua_console_533.c
+	service_terminal.c
+	argutil.c
 )
 add_library(xb_luaconsole SHARED ${XB-LUA_CONSOLE})
 target_link_libraries (xb_luaconsole ${EXTRA_LIBS})
