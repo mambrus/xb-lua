@@ -283,7 +283,16 @@ set_target_properties(
   xb_luaconsole PROPERTIES PUBLIC_HEADER
   "include/lua/console.h")
 
-### Lua examples (tbd) ########################
+### Lua examples ########################
+add_executable(luaex-terminal-service examples/terminal_service.c)
+target_link_libraries (luaex-terminal-service
+	xb_luacore
+	xb_luaaux
+	xb_lualib
+	xb_luaconsole
+	${EXTRA_LIBS}
+	${GOODI_LIBS}
+)
 #if (BUILD_XB-LUA_EXAMPLES)
 #	add_subdirectory (examples)
 #endif (BUILD_XB-LUA_EXAMPLES)
