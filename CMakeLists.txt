@@ -265,6 +265,7 @@ target_link_libraries (xb_lua
 ### lua-console & terminal lib #################
 set(XB-LUA_CONSOLE
 	lua_console_533.c
+	luabind.c
 	service_terminal.c
 	argutil.c
 )
