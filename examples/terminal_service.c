@@ -16,71 +16,23 @@
 #undef  NDEBUG
 #include <assert.h>
 
-void *terminal_service(void *inarg)
+#define PORT 2772
+#define HIF "@ANY@"
+
+int m_argc;
+char ** m_argv;
+
+int main(int argc, char **argv)
 {
-    int s, fd;
-    char **lua_argv;
-    int lua_argc;
-    int p_terminal = (long)inarg;
-
-    fprintf(stderr,
-            "Console child service starts and will use socket[port] : [%d]\n",
-            p_terminal);
-
-    s = init_server(p_terminal, "@ANY@");
-    fprintf(stderr, "Console service started at socket[port]: %d[%d]\n", s,
-            p_terminal);
-
-    while (1) {
-        fd = open_server(s);
-        fprintf(stderr,
-                "Console servicing fd:%d for socket[port]: %d[%d]\n", fd, s,
-                p_terminal);
-
-        /* Note that if run as a thread, all other threads usage of
-           stdio will also interact with the same socket */
-        close(0);
-        dup(fd);
-        close(1);
-        dup(fd);
-        close(2);
-        dup(fd);
-
-        while (!feof(stdin)) {
-            lua_argc = args2argv(&lua_argv, "lua", "--");
-            lua_main(lua_argc, lua_argv);
-            free(lua_argv);
-        }
-    }
-}
-
-int start_service_terminal(int p_terminal)
-{
-    int childpid = 0;
-
-#ifdef SERVICE_CONSOLE_NOT_FORKED
-    /*I.e. if not forked, then threaded */
-
-    pthread_t t_thread;
     int rc;
+	m_argc=argc;
+	m_argv=argv;
 
-    childpid = 1;
-    rc = pthread_create
-        (&t_thread, NULL, terminal_service, (void *)((intptr_t) p_terminal));
-    if (rc != 0)
-#else
-    assert((childpid = fork()) >= 0);
-#endif
+    rc = start_service_terminal(PORT);
 
-    if (childpid == 0) {
-        /* Child executes this */
-        terminal_service((void *)((intptr_t) p_terminal));
-
-        /* Should never execute */
-        perror("exec error");
-        exit(-1);
+    printf("Hellow world: %d\n", rc);
+    while (1) {
+        sleep(1);
     }
-
-    /* Parent executes this */
-    return childpid;
+    return 0;
 }

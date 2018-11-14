@@ -44,7 +44,14 @@ endif (HAVE_LIB_HISTORY)
 if (HAVE_LIB_NCURSES)
     set(GOODI_LIBS ${GOODI_LIBS} ncurses)
 endif (HAVE_LIB_NCURSES)
+#
+CHECK_LIBRARY_EXISTS(sotcptap init_server "" HAVE_LIB_TCPTAP)
+if (NOT HAVE_LIB_TCPTAP)
+    message (WARNING
+        "TCP-TAP not found. Will not build what's dependent of TCP-TAP")
+endif (NOT HAVE_LIB_TCPTAP)
 
+# Adapt library path where supported or different
 message (STATUS "Checking for (p)Threads")
 find_package(Threads)
 
@@ -285,15 +292,18 @@ set_target_properties(
   "include/lua/console.h")
 
 ### Lua examples ########################
-add_executable(luaex-terminal-service examples/terminal_service.c)
-target_link_libraries (luaex-terminal-service
-	xb_luacore
-	xb_luaaux
-	xb_lualib
-	xb_luaconsole
-	${EXTRA_LIBS}
-	${GOODI_LIBS}
+if (HAVE_LIB_TCPTAP)
+	add_executable(luaex-terminal-service examples/terminal_service.c)
+	target_link_libraries (luaex-terminal-service
+		xb_luaconsole
+		xb_luacore
+		xb_luaaux
+		xb_lualib
+		sotcptap
+		${EXTRA_LIBS}
+		${GOODI_LIBS}
 )
+endif (HAVE_LIB_TCPTAP)
 #if (BUILD_XB-LUA_EXAMPLES)
 #	add_subdirectory (examples)
 #endif (BUILD_XB-LUA_EXAMPLES)
