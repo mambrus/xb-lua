@@ -216,6 +216,8 @@ target_link_libraries (xb_luacore_static ${EXTRA_LIBS})
 set_target_properties(
   xb_luacore PROPERTIES PUBLIC_HEADER
   "lua/lua.h")
+set_property(TARGET xb_luacore APPEND PROPERTY PUBLIC_HEADER
+  "lua/lprefix.h")
 
 ### aux library #############################
 set(XB-LUA_AUX_O
