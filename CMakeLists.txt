@@ -132,10 +132,10 @@ else ()
 	SET(ENABLE_LINUX_GOODIES OFF)
 endif ()
 
+SET(CMAKE_EXTRA_C_FLAGS "${CMAKE_EXTRA_C_FLAGS} -std=gnu11 -DLUA_COMPAT_5_2")
 if (ENABLE_LINUX_GOODIES)
-	SET(CMAKE_EXTRA_C_FLAGS "${CMAKE_EXTRA_C_FLAGS} -DLUA_USE_LINUX")
+#	SET(CMAKE_EXTRA_C_FLAGS "${CMAKE_EXTRA_C_FLAGS} -DLUA_USE_LINUX")
 else ()
-	SET(CMAKE_EXTRA_C_FLAGS "${CMAKE_EXTRA_C_FLAGS} -std=gnu11 -O0 -g3 -Werror -DLUA_COMPAT_5_2 -DSERVICE_CONSOLE_NOT_FORKED")
 	UNSET(GOODI_LIBS)
 endif ()
 
@@ -301,18 +301,18 @@ set_property(TARGET xb_luaconsole APPEND PROPERTY PUBLIC_HEADER
 	"luabind.h")
 
 ### Lua examples ########################
-#if (HAVE_LIB_TCPTAP)
-#	add_executable(luaex-terminal-service examples/terminal_service.c)
-#	target_link_libraries (luaex-terminal-service
-#		xb_luaconsole
-#		xb_luacore
-#		xb_luaaux
-#		xb_lualib
-#		sotcptap
-#		${EXTRA_LIBS}
-#		${GOODI_LIBS}
-#)
-#endif (HAVE_LIB_TCPTAP)
+if (HAVE_LIB_TCPTAP)
+	add_executable(luaex-terminal-service examples/terminal_service.c)
+	target_link_libraries (luaex-terminal-service
+		xb_luaconsole
+		xb_luacore
+		xb_luaaux
+		xb_lualib
+		sotcptap
+		${EXTRA_LIBS}
+		${GOODI_LIBS}
+	)
+endif (HAVE_LIB_TCPTAP)
 #if (BUILD_XB-LUA_EXAMPLES)
 #	add_subdirectory (examples)
 #endif (BUILD_XB-LUA_EXAMPLES)
