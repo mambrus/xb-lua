@@ -135,7 +135,7 @@ endif ()
 if (ENABLE_LINUX_GOODIES)
 	SET(CMAKE_EXTRA_C_FLAGS "${CMAKE_EXTRA_C_FLAGS} -DLUA_USE_LINUX")
 else ()
-	SET(CMAKE_EXTRA_C_FLAGS "${CMAKE_EXTRA_C_FLAGS} -DLUA_USE_POSIX -std=gnu11 -O0 -g3 -Werror -DLUA_COMPAT_5_2 -DSERVICE_CONSOLE_NOT_FORKED")
+	SET(CMAKE_EXTRA_C_FLAGS "${CMAKE_EXTRA_C_FLAGS} -std=gnu11 -O0 -g3 -Werror -DLUA_COMPAT_5_2 -DSERVICE_CONSOLE_NOT_FORKED")
 	UNSET(GOODI_LIBS)
 endif ()
 
@@ -274,7 +274,7 @@ target_link_libraries (xb_lua
 
 ### lua-console & terminal lib #################
 set(XB-LUA_CONSOLE
-	#lua_console_533.c
+	lua_console_533.c
 	luabind.c
 	service_terminal.c
 	argutil.c
