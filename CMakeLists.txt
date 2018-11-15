@@ -289,10 +289,14 @@ target_link_libraries (xb_luaconsole_static
 )
 
 set_target_properties(
-	xb_luaconsole PROPERTIES PUBLIC_HEADERS
-	"include/lua/console.h",
-	"service_terminal.h"
-)
+  xb_luaconsole PROPERTIES PUBLIC_HEADER
+  "include/lua/console.h")
+set_property(TARGET xb_luaconsole APPEND PROPERTY PUBLIC_HEADER
+	"service_terminal.h")
+set_property(TARGET xb_luaconsole APPEND PROPERTY PUBLIC_HEADER
+	"argutil.h")
+set_property(TARGET xb_luaconsole APPEND PROPERTY PUBLIC_HEADER
+	"luabind.h")
 
 ### Lua examples ########################
 #if (HAVE_LIB_TCPTAP)
