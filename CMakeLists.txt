@@ -135,6 +135,7 @@ endif ()
 if (ENABLE_LINUX_GOODIES)
 	SET(CMAKE_EXTRA_C_FLAGS "${CMAKE_EXTRA_C_FLAGS} -DLUA_USE_LINUX")
 else ()
+	SET(CMAKE_EXTRA_C_FLAGS "${CMAKE_EXTRA_C_FLAGS} -DLUA_USE_POSIX -std=gnu11 -O0 -g3 -Werror -DLUA_COMPAT_5_2 -DSERVICE_CONSOLE_NOT_FORKED")
 	UNSET(GOODI_LIBS)
 endif ()
 
@@ -271,7 +272,7 @@ target_link_libraries (xb_lua
 
 ### lua-console & terminal lib #################
 set(XB-LUA_CONSOLE
-	lua_console_533.c
+	#lua_console_533.c
 	luabind.c
 	service_terminal.c
 	argutil.c
@@ -288,22 +289,24 @@ target_link_libraries (xb_luaconsole_static
 )
 
 set_target_properties(
-  xb_luaconsole PROPERTIES PUBLIC_HEADER
-  "include/lua/console.h")
+	xb_luaconsole PROPERTIES PUBLIC_HEADERS
+	"include/lua/console.h",
+	"service_terminal.h"
+)
 
 ### Lua examples ########################
-if (HAVE_LIB_TCPTAP)
-	add_executable(luaex-terminal-service examples/terminal_service.c)
-	target_link_libraries (luaex-terminal-service
-		xb_luaconsole
-		xb_luacore
-		xb_luaaux
-		xb_lualib
-		sotcptap
-		${EXTRA_LIBS}
-		${GOODI_LIBS}
-)
-endif (HAVE_LIB_TCPTAP)
+#if (HAVE_LIB_TCPTAP)
+#	add_executable(luaex-terminal-service examples/terminal_service.c)
+#	target_link_libraries (luaex-terminal-service
+#		xb_luaconsole
+#		xb_luacore
+#		xb_luaaux
+#		xb_lualib
+#		sotcptap
+#		${EXTRA_LIBS}
+#		${GOODI_LIBS}
+#)
+#endif (HAVE_LIB_TCPTAP)
 #if (BUILD_XB-LUA_EXAMPLES)
 #	add_subdirectory (examples)
 #endif (BUILD_XB-LUA_EXAMPLES)

@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
 #include <lua.h>
 #include <lualib.h>
 #include <lauxlib.h>
@@ -12,6 +13,7 @@
 #include <pthread.h>
 #include <lua/console.h>
 #include <tcp-tap/server.h>
+#include <liblog/log.h>
 #include "service_terminal.h"
 #undef  NDEBUG
 #include <assert.h>
@@ -21,21 +23,22 @@ void *terminal_service(void *inarg)
     int s, fd;
     char **lua_argv;
     int lua_argc;
-    int p_terminal = (long)inarg;
+    int p_console = (long)inarg;
+   
+    LOGI("Console child (ROMAN) service starts and will use socket[port] : [%d]\n",
+         p_console);
 
-    fprintf(stderr,
-            "Console child service starts and will use socket[port] : [%d]\n",
-            p_terminal);
-
-    s = init_server(p_terminal, "@ANY@");
-    fprintf(stderr, "Console service started at socket[port]: %d[%d]\n", s,
-            p_terminal);
+    s = init_server(p_console, "@ANY@");
+    LOGI("Console service started at socket[port]: %d[%d]\n", s, p_console);
 
     while (1) {
+        LOGI("Console service is waiting for connection");
         fd = open_server(s);
-        fprintf(stderr,
-                "Console servicing fd:%d for socket[port]: %d[%d]\n", fd, s,
-                p_terminal);
+        LOGI("Console service accepted connection");
+        // Make a copy of existing standard streams
+        int stdin_copy = dup(0);
+        int stdout_copy = dup(1);
+        int stderr_copy = dup(2);
 
         /* Note that if run as a thread, all other threads usage of
            stdio will also interact with the same socket */
@@ -51,36 +54,34 @@ void *terminal_service(void *inarg)
             lua_main(lua_argc, lua_argv);
             free(lua_argv);
         }
+
+        // Copy back original standard streams
+        dup2(stdin_copy, 0);
+        dup2(stdout_copy, 1);
+        dup2(stderr_copy, 2);
+
+        // Close copies as not needed anymore
+        close(stdin_copy);
+        close(stdout_copy);
+        close(stderr_copy);
+
+        // Clean errors
+        clearerr(stdin);
+        clearerr(stdout);
+        clearerr(stderr);
     }
 }
 
 int start_service_terminal(int p_terminal)
 {
-    int childpid = 0;
-
-#ifdef SERVICE_CONSOLE_NOT_FORKED
-    /*I.e. if not forked, then threaded */
-
     pthread_t t_thread;
-    int rc;
+    int rc = -1;
 
-    childpid = 1;
+    signal(SIGPIPE, SIG_IGN);
+
     rc = pthread_create
         (&t_thread, NULL, terminal_service, (void *)((intptr_t) p_terminal));
-    if (rc != 0)
-#else
-    assert((childpid = fork()) >= 0);
-#endif
-
-    if (childpid == 0) {
-        /* Child executes this */
-        terminal_service((void *)((intptr_t) p_terminal));
-
-        /* Should never execute */
-        perror("exec error");
-        exit(-1);
-    }
 
     /* Parent executes this */
-    return childpid;
+    return rc;
 }
