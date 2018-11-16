@@ -47,22 +47,22 @@
 */
 #if !defined(lua_stdin_is_tty)	/* { */
 
-#if defined(LUA_USE_POSIX)	/* { */
+#	if defined(LUA_USE_POSIX)	/* { */
 
-#include <unistd.h>
-#define lua_stdin_is_tty()	isatty(0)
+#		include <unistd.h>
+#		define lua_stdin_is_tty()	isatty(0)
 
-#elif defined(LUA_USE_WINDOWS)	/* }{ */
+#	elif defined(LUA_USE_WINDOWS)	/* }{ */
 
-#include <io.h>
-#define lua_stdin_is_tty()	_isatty(_fileno(stdin))
+#		include <io.h>
+#		define lua_stdin_is_tty()	_isatty(_fileno(stdin))
 
-#else				/* }{ */
+#	else				/* }{ */
 
-/* ISO C definition */
-#define lua_stdin_is_tty()	1  /* assume stdin is a tty */
+		/* ISO C definition */
+#		define lua_stdin_is_tty()	1  /* assume stdin is a tty */
 
-#endif				/* } */
+#	endif				/* } */
 
 #endif				/* } */
 
@@ -75,23 +75,23 @@
 */
 #if !defined(lua_readline)	/* { */
 
-#if defined(LUA_USE_READLINE)	/* { */
+#	if defined(LUA_USE_READLINE)	/* { */
 
-#include <readline/readline.h>
-#include <readline/history.h>
-#define lua_readline(L,b,p)	((void)L, ((b)=readline(p)) != NULL)
-#define lua_saveline(L,line)	((void)L, add_history(line))
-#define lua_freeline(L,b)	((void)L, free(b))
+#		include <readline/readline.h>
+#		include <readline/history.h>
+#		define lua_readline(L,b,p)	((void)L, ((b)=readline(p)) != NULL)
+#		define lua_saveline(L,line)	((void)L, add_history(line))
+#		define lua_freeline(L,b)	((void)L, free(b))
 
-#else				/* }{ */
+#	else				/* }{ */
 
-#define lua_readline(L,b,p) \
-        ((void)L, fputs(p, stdout), fflush(stdout),  /* show prompt */ \
-        fgets(b, LUA_MAXINPUT, stdin) != NULL)  /* get line */
-#define lua_saveline(L,line)	{ (void)L; (void)line; }
-#define lua_freeline(L,b)	{ (void)L; (void)b; }
+#		define lua_readline(L,b,p) \
+        		((void)L, fputs(p, stdout), fflush(stdout),  /* show prompt */ \
+        		fgets(b, LUA_MAXINPUT, stdin) != NULL)  /* get line */
+#		define lua_saveline(L,line)	{ (void)L; (void)line; }
+#		define lua_freeline(L,b)	{ (void)L; (void)b; }
 
-#endif				/* } */
+#	endif				/* } */
 
 #endif				/* } */
 
