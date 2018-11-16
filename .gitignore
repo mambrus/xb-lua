@@ -59,3 +59,6 @@ c-tags
 
 # Final executable
 xb_lua
+
+# Example binaries (if built)
+luaex-*
