@@ -9,10 +9,13 @@
 #include <lualib.h>
 #include <lauxlib.h>
 #include <argutil.h>
-#include <string.h>
+#include <xb-lua/lauxlib.h>
+#include <xb-lua/service_terminal.h>
+#include <xb-lua/luabind.h>
 #include <lua/console.h>
+#include <string.h>
 #include <tcp-tap/server.h>
-#include "service_terminal.h"
+#include "lapi.h"
 #undef  NDEBUG
 #include <assert.h>
 
@@ -27,6 +30,8 @@ int main(int argc, char **argv)
 
     printf("Terminal service running at localhost under port %d: %d\n", PORT,
            rc);
+	assert(lua_registerlibrary(bind_demo_library) > 0);
+#include <xb-lua/lauxlib.h>
     printf("In paralell to stdio session starting now...\n");
 
     while (!feof(stdin)) {

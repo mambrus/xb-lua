@@ -301,8 +301,12 @@ set_property(TARGET xb_luaconsole APPEND PROPERTY PUBLIC_HEADER
 	"luabind.h")
 
 ### Lua examples ########################
+set(XB-LUA_TERMINAL_SERVICE_DEMO
+	examples/terminal_service.c
+	examples/lapi_demolib.c
+)
 if (HAVE_LIB_TCPTAP)
-	add_executable(luaex-terminal-service examples/terminal_service.c)
+	add_executable(luaex-terminal-service ${XB-LUA_TERMINAL_SERVICE_DEMO})
 	target_link_libraries (luaex-terminal-service
 		xb_luaconsole
 		xb_luacore
