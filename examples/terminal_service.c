@@ -19,20 +19,23 @@
 #define PORT 2772
 #define HIF "@ANY@"
 
-int m_argc;
-char ** m_argv;
-
 int main(int argc, char **argv)
 {
     int rc;
-	m_argc=argc;
-	m_argv=argv;
+    char **lua_argv;
+    int lua_argc;
 
     rc = start_service_terminal(PORT);
 
-    printf("Hellow world: %d\n", rc);
+    printf("Terminal service running at localhost under port %d: %d\n", PORT,
+           rc);
+    printf("In paralell to stdio session starting now...\n");
     while (1) {
-        sleep(1);
+        while (!feof(stdin)) {
+            lua_argc = args2argv(&lua_argv, "lua", "--");
+            lua_main(lua_argc, lua_argv);
+            free(lua_argv);
+        }
     }
     return 0;
 }

@@ -11,6 +11,7 @@
 #include <argutil.h>
 #include <pthread.h>
 #include <lua/console.h>
+#include <liblog/log.h>
 #include <tcp-tap/server.h>
 #include "service_terminal.h"
 #undef  NDEBUG
@@ -23,13 +24,11 @@ void *terminal_service(void *inarg)
     int lua_argc;
     int p_terminal = (long)inarg;
 
-    fprintf(stderr,
-            "Console child service starts and will use socket[port] : [%d]\n",
-            p_terminal);
+    LOGD("Console child service starts and will use socket[port] : [%d]\n",
+         p_terminal);
 
     s = init_server(p_terminal, "@ANY@");
-    fprintf(stderr, "Console service started at socket[port]: %d[%d]\n", s,
-            p_terminal);
+    LOGD("Console service started at socket[port]: %d[%d]\n", s, p_terminal);
 
     while (1) {
         fd = open_server(s);
@@ -57,6 +56,10 @@ void *terminal_service(void *inarg)
 int start_service_terminal(int p_terminal)
 {
     int childpid = 0;
+
+    /* Regardless of how liblog is configured, make sure all output is to
+     * syslog and not to stderr */
+    log_syslog_config(0);
 
 #ifdef SERVICE_CONSOLE_NOT_FORKED
     /*I.e. if not forked, then threaded */
