@@ -9,5 +9,6 @@
 #include "lauxlib.h"
 
 int lua_main(int argc, char **argv);
+int start_service_terminal(int port, const char *ifname);
 
 #endif                          //lua_console_h

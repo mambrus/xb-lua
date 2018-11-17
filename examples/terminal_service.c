@@ -20,19 +20,14 @@
 #include <assert.h>
 
 #define PORT 2772
-#define HIF "@ANY@"
+#define IFNAME "@ANY@"
 
 int main(int argc, char **argv)
 {
-    int rc;
+    assert(lua_registerlibrary(bind_demo_library) > 0);
+    assert(start_service_terminal(PORT, IFNAME) == 0);
 
-    rc = start_service_terminal(PORT);
-
-    printf("Terminal service running at localhost under port %d: %d\n", PORT,
-           rc);
-	assert(lua_registerlibrary(bind_demo_library) > 0);
-#include <xb-lua/lauxlib.h>
-    printf("In paralell to stdio session starting now...\n");
+    printf("Terminal service running in paralell at [%s:%d]\n\n", IFNAME, PORT);
 
     while (!feof(stdin)) {
         char **lua_argv;
@@ -47,7 +42,6 @@ int main(int argc, char **argv)
                         NAME_MAX);
                 args_buffer[strnlen(args_buffer, PATH_MAX)] = ' ';
             }
-            printf("lua %s\n", args_buffer);
 
             lua_argc = args2argv(&lua_argv, "lua", args_buffer);
             rc = lua_main(lua_argc, lua_argv);
@@ -55,8 +49,6 @@ int main(int argc, char **argv)
 
             return rc;
         } else {
-            printf("lua interactive:\n");
-
             lua_argc = args2argv(&lua_argv, "lua", "--");
             lua_main(lua_argc, lua_argv);
             free(lua_argv);

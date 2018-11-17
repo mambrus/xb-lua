@@ -5,6 +5,6 @@
 #ifndef service_terminal_h
 #define service_terminal_h
 
-int start_service_terminal(int p_terminal);
+int start_service_terminal(int port, const char *ifname);
 
 #endif                          // service_terminal_h
