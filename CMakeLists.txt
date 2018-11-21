@@ -220,6 +220,8 @@ set_target_properties(
   "lua/lua.h")
 set_property(TARGET xb_luacore APPEND PROPERTY PUBLIC_HEADER
   "lua/lprefix.h")
+set_property(TARGET xb_luacore APPEND PROPERTY PUBLIC_HEADER
+	"lua/luaconf.h")
 
 ### aux library #############################
 set(XB-LUA_AUX_O
