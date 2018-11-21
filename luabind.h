@@ -5,8 +5,8 @@
 #ifndef luabind_h
 #define luabind_h
 
-#include "lua.h"
-#include "lauxlib.h"
+#include <xb-lua/lua.h>
+#include <xb-lua/lauxlib.h>
 
 typedef void (*bind_f) (lua_State * L);
 
