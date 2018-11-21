@@ -16,7 +16,7 @@
 #include <lua/console.h>
 #include <liblog/log.h>
 #include <liblog/assure.h>
-#include <tcp-tap/server.h>
+#include <tcp-tap/clientserver.h>
 #include "service_terminal.h"
 
 struct sockdef {

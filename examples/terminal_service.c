@@ -14,7 +14,7 @@
 #include <xb-lua/luabind.h>
 #include <lua/console.h>
 #include <string.h>
-#include <tcp-tap/server.h>
+#include <tcp-tap/clientserver.h>
 #include "lapi.h"
 #undef  NDEBUG
 #include <assert.h>
